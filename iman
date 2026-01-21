@@ -1,0 +1,102 @@
+using System;
+
+namespace imanPolymorphismAssignment
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            // Display student information
+            Console.WriteLine("Student: iman");
+            Console.WriteLine("Polymorphism Assignment\n");
+            
+            // Create an Employee object
+            Employee employee = new Employee("iman", "Software Developer");
+            
+            // Demonstrate polymorphism using IQuittable interface
+            Console.WriteLine("=== Polymorphism Demonstration ===");
+            
+            // 1. Create IQuittable reference to Employee object
+            IQuittable resigningEmployee = employee;
+            
+            // 2. Call Quit() method through interface reference
+            Console.WriteLine("\nCalling Quit() through IQuittable interface:");
+            resigningEmployee.Quit();
+            
+            // Show additional status
+            Console.WriteLine("\n=== Current Employee Status ===");
+            employee.DisplayStatus();
+            
+            Console.WriteLine("\nAssignment complete. Press Enter to exit...");
+            Console.ReadLine();
+        }
+    }
+
+    /// <summary>
+    /// Defines the contract for objects that can quit/resign
+    /// </summary>
+    public interface IQuittable
+    {
+        /// <summary>
+        /// Method to handle resignation process
+        /// </summary>
+        void Quit();
+    }
+
+    /// <summary>
+    /// Represents an employee that can resign (implements IQuittable)
+    /// </summary>
+    public class Employee : IQuittable
+    {
+        // Properties
+        public string FullName { get; set; }
+        public string Position { get; set; }
+        public bool HasResigned { get; private set; }
+        public DateTime ResignationDate { get; private set; }
+
+        /// <summary>
+        /// Initializes a new employee
+        /// </summary>
+        public Employee(string fullName, string position)
+        {
+            FullName = fullName;
+            Position = position;
+            HasResigned = false;
+            Console.WriteLine($"Employee created: {FullName}, {Position}");
+        }
+
+        /// <summary>
+        /// Implements the Quit method from IQuittable interface
+        /// </summary>
+        public void Quit()
+        {
+            if (!HasResigned)
+            {
+                ResignationDate = DateTime.Now;
+                HasResigned = true;
+                Console.WriteLine($"{FullName} has resigned from {Position} position.");
+                Console.WriteLine($"Effective date: {ResignationDate:yyyy-MM-dd}");
+                Console.WriteLine("We appreciate Maysoon's contributions to our team!");
+            }
+            else
+            {
+                Console.WriteLine($"{FullName} has already resigned on {ResignationDate:yyyy-MM-dd}");
+            }
+        }
+
+        /// <summary>
+        /// Displays current employment status
+        /// </summary>
+        public void DisplayStatus()
+        {
+            Console.WriteLine($"Employee: {FullName}");
+            Console.WriteLine($"Position: {Position}");
+            Console.WriteLine($"Status: {(HasResigned ? "Resigned" : "Active")}");
+            
+            if (HasResigned)
+            {
+                Console.WriteLine($"Resignation Date: {ResignationDate:yyyy-MM-dd}");
+            }
+        }
+    }
+}
